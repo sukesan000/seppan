@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.min.js"></script>
+    <link th:href="@{/css/top.css}" rel="stylesheet">
+    <script th:src="@{/js/top.js}"></script>
+    <meta charset="UTF-8">
+    <title>Top</title>
+</head>
+<body>
+    <header>
+        <h1 class="title">Seppan</h1>
+        <ul class="menu-group">
+            <li class="menu-item"><a href="#">カレンダー</a></li>
+            <li class="menu-item"><a href="#">統計</a></li>
+            <li class="menu-item"><a href="#">一覧</a></li>
+        </ul>
+    </header>
+    <div class="main_content">
+        <div class="calendar" id='calendar'></div>
+    </div>
+</body>
+</html>

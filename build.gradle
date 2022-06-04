@@ -24,10 +24,10 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	//implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -45,11 +45,11 @@ tasks.named('bootBuildImage') {
 	environment = ['BP_NATIVE_IMAGE': 'true']
 }
 
-tasks.named('hibernate') {
-	enhance {
-		enableLazyInitialization = true
-		enableDirtyTracking = true
-		enableAssociationManagement = true
-		enableExtendedEnhancement = false
-	}
-}
+//tasks.named('hibernate') {
+//	enhance {
+//		enableLazyInitialization = true
+//		enableDirtyTracking = true
+//		enableAssociationManagement = true
+//		enableExtendedEnhancement = false
+//	}
+//}
