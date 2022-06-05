@@ -4,12 +4,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.min.js"></script>
     <link th:href="@{/css/top.css}" rel="stylesheet">
+    <link th:href="@{/css/micromodal.css}" rel="stylesheet">
     <script th:src="@{/js/top.js}"></script>
+    <script script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
     <meta charset="UTF-8">
     <title>Top</title>
 </head>
 <body>
-    <header>
+    <header class="header_area">
         <h1 class="title">Seppan</h1>
         <ul class="menu-group">
             <li class="menu-item"><a href="#">カレンダー</a></li>
@@ -18,7 +20,35 @@
         </ul>
     </header>
     <div class="main_content">
+        <button type="button" data-micromodal-trigger="modal-1">Open</button>
         <div class="calendar" id='calendar'></div>
+    </div>
+
+    <!-- モーダルエリア　-->
+    <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        家計簿の入力
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main>
+                    <form action="#" th:action="@{/editEvent}" method="post">
+                        <div class="edit_info">
+                            <p class = "info_name">金額</p>
+                            <input id="edit_money" name="money" value="">
+                        </div>
+                        <div class="edit_info">
+                            <p class = "info_name">日付</p>
+                            <input type="date" id="edit_start" name="start" value="">
+                        </div>
+                        <button class="modal__btn modal__btn-primary" type="submit">変更する</button>
+                    </form>　
+                </main>
+            </div>
+        </div>
     </div>
 </body>
 </html>

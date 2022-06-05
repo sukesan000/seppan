@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+        MicroModal.init();
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
@@ -23,7 +24,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         url: '#'
                     }
                 ],
-                locale: 'ja'
+                locale: 'ja',
+                aspectRatio: 2.5,
+                dateClick: function(info) {
+                    console.log(info.date);
+                    console.log(info.dateStr);
+                    document.getElementById("edit_start").value = info.dateStr;
+                    MicroModal.show('modal-1');
+                }
         });
         calendar.render();
-      });
+});
