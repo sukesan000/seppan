@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 dateClick: function(info) {
                     console.log(info.date);
                     console.log(info.dateStr);
-                    document.getElementById("edit_start").value = info.dateStr;
+                    document.getElementById("edit_date").value = info.dateStr;
                     MicroModal.show('modal-1');
                 }
         });

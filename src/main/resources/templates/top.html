@@ -20,7 +20,6 @@
         </ul>
     </header>
     <div class="main_content">
-        <button type="button" data-micromodal-trigger="modal-1">Open</button>
         <div class="calendar" id='calendar'></div>
     </div>
 
@@ -35,16 +34,35 @@
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main>
-                    <form action="#" th:action="@{/editEvent}" method="post">
+                    <form th:action="@{/editEvent}" th:object="${eventInfo}" method="post">
                         <div class="edit_info">
                             <p class = "info_name">金額</p>
-                            <input id="edit_money" name="money" value="">
+                            <input type="text" class="edit" id="edit_money" th:field="*{money}" name="money">
+                        </div>
+                        <div class="edit_info">
+                            <p class = "info_name">カテゴリ</p>
+                            <select class="edit" id="edit_category edit" th:field="*{category}" name="category">
+                                <option value=""></option>
+                                <option value="生活費">生活費</option>
+                                <option value="電気代">電気代</option>
+                                <option value="水道代">水道代</option>
+                                <option value="ガス代">ガス代</option>
+                                <option value="通信費">通信費</option>
+                                <option value="家賃">家賃</option>
+                                <option value="その他">その他</option>
+                            </select>
                         </div>
                         <div class="edit_info">
                             <p class = "info_name">日付</p>
-                            <input type="date" id="edit_start" name="start" value="">
+                            <input type="date " class="edit" id="edit_date" th:field="*{date}" name="date">
                         </div>
-                        <button class="modal__btn modal__btn-primary" type="submit">変更する</button>
+                        <div class="edit_info">
+                            <p class = "info_name">備考</p>
+                            <input class="edit" id="edit_remarks" th:field="*{remarks}" name="remarks">
+                        </div>
+                        <div class="mordal_submit_btn">
+                            <button class="modal__btn modal__btn-primary" type="submit">変更する</button>
+                        </div>
                     </form>　
                 </main>
             </div>

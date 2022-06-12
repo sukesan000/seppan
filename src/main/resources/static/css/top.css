@@ -38,5 +38,14 @@
 }
 
 .info_name{
-    padding-right: 15px;
+    text-align: right;
+    width:30%;
+}
+
+.edit{
+    margin-left: 10px;
+}
+
+.mordal_submit_btn{
+    text-align: center;
 }
