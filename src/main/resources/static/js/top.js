@@ -1,37 +1,52 @@
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
         MicroModal.init();
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          events: [
-                    {
-                        id: '1',
-                        title: 'event1',
-                        start: '2022-06-01',
-                        url: '#'
-                    },
-                    {
-                        id: '2',
-                        title: 'event2',
-                        start: '2022-05-05',
-                        url: '#'
-                    },
-                    {
-                        id: '3',
-                        title: 'event3',
-                        start: '2021-01-07',
-                        end: '2021-01-11', // 2021-01-10 23:59:59で終了
-                        url: '#'
-                    }
-                ],
-                locale: 'ja',
-                aspectRatio: 2.5,
-                dateClick: function(info) {
-                    console.log(info.date);
-                    console.log(info.dateStr);
-                    document.getElementById("edit_date").value = info.dateStr;
-                    MicroModal.show('modal-1');
-                }
-        });
-        calendar.render();
+        renderCalendar();
+})
+
+$(function(){
+    $('#modal_btn').on("click", function(){
+        var EventInfo = {
+            money: $("#edit_money").val(),
+            category: $("#edit_category").val(),
+            date: $("#edit_date").val(),
+            remarks: $("#edit_remarks").val()
+        }
+
+        $.ajax({
+              url: "/seppan/api/editEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
+              type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
+              contentType: "application/json",
+              data: JSON.stringify(EventInfo),
+              dataType: "json" // レスポンスデータをjson形式と指定する
+            })
+            .done(function(data) {
+                renderCalendar();
+                console.log("success!!");
+              })
+            .fail(function() {
+              alert("error!");  // 通信に失敗した場合の処理
+            })
+    });
 });
+
+function renderCalendar(){
+    $(function() {
+        $('#calendar').fullCalendar({
+            initialView: 'dayGridMonth',
+            eventSources: [
+                {
+                    url: '/seppan/api/all',
+                    type: 'GET',
+                }
+            ],
+            locale: 'ja',
+            aspectRatio: 2.5,
+            dayClick: function(date) {
+                var dateStr = date.format();
+                console.log(dateStr);
+                document.getElementById("edit_date").value = dateStr;
+                MicroModal.show('modal-1');
+            }
+        });
+    });
+}

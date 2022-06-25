@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/seppan/api")
 public class RestTopController {
     @GetMapping("/all")
     public String getEvents(@ModelAttribute("eventInfo") EventInfo eventInfo, Model model) throws JsonProcessingException {
@@ -20,14 +21,12 @@ public class RestTopController {
             List<DailySummaryModel> events = new ArrayList<>();
             DailySummaryModel event = new DailySummaryModel();
             event.setTitle("first event");
-            event.setStart("2022-05-14");
-            event.setEnd("2022-05-15");
+            event.setStart("2022-06-14");
             events.add(event);
 
             event = new DailySummaryModel();
             event.setTitle("second event");
-            event.setStart("2022-05-24");
-            event.setEnd("2022-05-25");
+            event.setStart("2022-06-24");
             events.add(event);
 
             //FullCalendar pass encoded string
@@ -41,11 +40,26 @@ public class RestTopController {
     }
 
     @PostMapping("/editEvent")
-    public void editEvent(@ModelAttribute EventInfo eventInfo) {
-        if(eventInfo.getCategory().isEmpty()) {
-            System.out.println("成功");
-        }else{
-            System.out.println("失敗");
+    public void editEvent(@RequestBody EventInfo eventInfo) {
+        String jsonMsg = null;
+        try {
+            List<DailySummaryModel> events = new ArrayList<>();
+            DailySummaryModel event = new DailySummaryModel();
+            event.setTitle("first event");
+            event.setStart(eventInfo.getDate());
+            events.add(event);
+
+            event = new DailySummaryModel();
+            event.setTitle("second event");
+            event.setStart("2022-05-24");
+            event.setEnd("2022-05-25");
+            events.add(event);
+
+            //FullCalendar pass encoded string
+            ObjectMapper mapper = new ObjectMapper();
+            jsonMsg =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(events);
+        } catch (JsonProcessingException ioex) {
+            System.out.println(ioex.getMessage());
         }
     }
 
