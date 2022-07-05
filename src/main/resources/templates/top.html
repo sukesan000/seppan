@@ -20,6 +20,9 @@
             <li class="menu-item"><a href="#">統計</a></li>
             <li class="menu-item"><a href="#">一覧</a></li>
         </ul>
+        <form method="post" th:action="@{/logout}">
+            <button type="submit">ログアウト</button>
+        </form>
     </header>
     <div class="main_content">
         <div class="calendar" id='calendar'></div>
