@@ -13,17 +13,8 @@
     <title>Top</title>
 </head>
 <body>
-    <header class="header_area">
-        <h1 class="title">Seppan</h1>
-        <ul class="menu-group">
-            <li class="menu-item"><a href="#">カレンダー</a></li>
-            <li class="menu-item"><a href="#">統計</a></li>
-            <li class="menu-item"><a href="#">一覧</a></li>
-        </ul>
-        <form method="post" th:action="@{/logout}">
-            <button type="submit">ログアウト</button>
-        </form>
-    </header>
+    <div th:replace="header :: main-header"></div>
+
     <div class="main_content">
         <div class="calendar" id='calendar'></div>
     </div>

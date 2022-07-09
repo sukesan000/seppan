@@ -3,25 +3,6 @@
     padding: 0px;
 }
 
-.header_area{
-    display:flex;
-    width:100%;
-    height:80px;
-    background-color:#6ec25e;
-    align-items: center;
-}
-
-.title{
-    color:white;
-    margin-right: auto;
-}
-
-.menu-item {
-  list-style: none;
-  display: inline-block;
-  padding: 10px;
-}
-
 .main_content{
     z-index: 1;
 }
