@@ -4,7 +4,6 @@ import com.example.seppan.form.EventInfo;
 import com.example.seppan.model.DailySummaryModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/seppan/api")
+@RequestMapping("/seppan/top/api")
 public class RestTopController {
     @GetMapping("/all")
     public String getEvents(@ModelAttribute("eventInfo") EventInfo eventInfo, Model model) throws JsonProcessingException {

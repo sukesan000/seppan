@@ -13,7 +13,7 @@ $(function(){
         }
 
         $.ajax({
-              url: "/seppan/api/editEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
+              url: "/seppan/top/api/editEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
               type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
               contentType: "application/json",
               data: JSON.stringify(EventInfo),
@@ -35,7 +35,7 @@ function renderCalendar(){
             initialView: 'dayGridMonth',
             eventSources: [
                 {
-                    url: '/seppan/api/all',
+                    url: '/seppan/top/api/all',
                     type: 'GET',
                 }
             ],
