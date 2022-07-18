@@ -1,6 +1,13 @@
 $(document).ready(function() {
         MicroModal.init();
         renderCalendar();
+
+        //ログインユーザをセッション保持
+        const username = $('#username').val();
+        sessionStorage.setItem('userName', username);
+
+        //ユーザ名表示
+        $('#username_display').val("ようこそ　" + username + "さん");
 })
 
 $(function(){

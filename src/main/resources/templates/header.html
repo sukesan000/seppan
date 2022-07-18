@@ -7,13 +7,14 @@
 <body>
 <header th:fragment="main-header" class="header_area">
   <h1 class="title">Seppan</h1>
+  <div id="username_display"></div>
   <ul class="menu-group">
     <li class="menu-item"><a href="#">カレンダー</a></li>
     <li class="menu-item"><a href="#">統計</a></li>
     <li class="menu-item"><a href="#">一覧</a></li>
   </ul>
   <form method="post" th:action="@{/logout}">
-    <button type="submit">ログアウト</button>
+    <a id="logout-btn" type="submit">ログアウト</a>
   </form>
 </header>
 </body>
