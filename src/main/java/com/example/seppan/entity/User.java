@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class User {
     @Column(name = "user_id")
     @Id
-    private Long userId;
+    private int userId;
 
     @Column(name = "name")
     private String userName;
@@ -24,4 +24,7 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "shared_user")
+    private int sharedUser;
 }

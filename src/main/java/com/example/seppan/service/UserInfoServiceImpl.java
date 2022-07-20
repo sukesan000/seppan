@@ -16,4 +16,10 @@ public class UserInfoServiceImpl implements UserInfoService{
         User user = userInfoDao.findByUserName(name);
         return user;
     }
+
+    @Override
+    public User findById(int sharedUserNo) {
+        User user = userInfoDao.findByUserId(sharedUserNo);
+        return user;
+    }
 }

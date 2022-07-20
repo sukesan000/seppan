@@ -4,4 +4,5 @@ import com.example.seppan.entity.User;
 
 public interface UserInfoService {
     User findByName(String name);
+    User findById(int sharedUserNo);
 }

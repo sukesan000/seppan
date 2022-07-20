@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserInfoDao extends JpaRepository<User, Integer> {
     User findByUserName(String name);
+    User findByUserId(int sharedUserNo);
 }

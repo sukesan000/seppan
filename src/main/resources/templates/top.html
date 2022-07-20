@@ -60,7 +60,9 @@
                         </div>
                         <div class="edit_info">
                             <p class = "info_name">支払い者</p>
-                            <option th:each="user : ${shared_users}" th:value="${user.id}" th:inline="text">[[${user.name}]]</option>
+                            <select class="edit" id="edit_payer" name="payer">
+                                <option th:each="user : ${users}" th:value="${user}"th:inline="text">[[${user}]]</option>
+                            </select>
                         </div>
                         <div class="edit_info">
                             <p class = "info_name">備考</p>
