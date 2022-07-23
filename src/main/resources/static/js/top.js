@@ -16,6 +16,7 @@ $(function(){
             money: $("#edit_money").val(),
             category: $("#edit_category").val(),
             date: $("#edit_date").val(),
+            payer: $("#edit_payer").val(),
             remarks: $("#edit_remarks").val()
         }
 

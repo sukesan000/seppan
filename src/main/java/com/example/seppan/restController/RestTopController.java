@@ -42,6 +42,12 @@ public class RestTopController {
     public void editEvent(@RequestBody EventInfo eventInfo) {
         String jsonMsg = null;
         try {
+            //取得した情報をDBに登録する
+
+
+            //表示させる情報をeventsにまとめ出力
+
+
             List<DailySummaryModel> events = new ArrayList<>();
             DailySummaryModel event = new DailySummaryModel();
             event.setTitle("first event");

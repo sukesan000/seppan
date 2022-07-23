@@ -3,10 +3,7 @@ package com.example.seppan.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -14,6 +11,7 @@ import javax.persistence.Table;
 public class User {
     @Column(name = "user_id")
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
     @Column(name = "name")

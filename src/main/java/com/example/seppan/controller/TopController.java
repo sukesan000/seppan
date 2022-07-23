@@ -1,7 +1,9 @@
 package com.example.seppan.controller;
 
+import com.example.seppan.entity.Category;
 import com.example.seppan.entity.User;
 import com.example.seppan.form.EventInfo;
+import com.example.seppan.service.CategoryService;
 import com.example.seppan.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,8 @@ import java.util.List;
 public class TopController {
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/top")
     public String top(Model model){
@@ -39,6 +43,11 @@ public class TopController {
             shared_users.add(shared_user.getUserName());
             model.addAttribute("users", shared_users);
         }
+
+        //カテゴリ取得
+        List<Category> categories = categoryService.getAllCategory();
+        model.addAttribute("categories", categories);
+
         return "top";
     }
 }
