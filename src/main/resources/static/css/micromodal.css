@@ -147,3 +147,7 @@
 .micromodal-slide .modal__overlay {
   will-change: transform;
 }
+
+input:invalid {
+  border: 2px dashed red;
+}

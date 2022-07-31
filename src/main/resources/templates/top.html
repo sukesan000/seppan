@@ -39,21 +39,21 @@
                     <form id="modal_form">
                         <div class="edit_info">
                             <p class = "info_name">金額</p>
-                            <input type="text" class="edit" id="edit_money" name="money" required>
+                            <input type="text" class="edit" id="edit_money" name="money">
                         </div>
                         <div class="edit_info">
                             <p class = "info_name">カテゴリ</p>
-                            <select class="edit" id="edit_category" name="category" required>
+                            <select class="edit" id="edit_category" name="category">
                                 <option th:each="category: ${categories}" th:value="${category.id}" th:inline="text">[[${category.name}]]</option>
                             </select>
                         </div>
                         <div class="edit_info">
                             <p class = "info_name">日付</p>
-                            <input type="date " class="edit" id="edit_date" name="date" required>
+                            <input type="date" class="edit" id="edit_date" name="date">
                         </div>
                         <div class="edit_info">
                             <p class = "info_name">支払い者</p>
-                            <select class="edit" id="edit_payer" name="payer" required>
+                            <select class="edit" id="edit_payer" name="payer">
                                 <option th:each="user : ${users}" th:value="${user.userId}"th:inline="text">[[${user.userName}]]</option>
                             </select>
                         </div>
