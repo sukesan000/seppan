@@ -2,8 +2,13 @@ package com.example.seppan.restController;
 
 import com.example.seppan.form.EventInfo;
 import com.example.seppan.model.DailySummaryModel;
+import com.example.seppan.service.MoneyRecordService;
+import com.example.seppan.service.UserInfoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +18,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/seppan/top/api")
 public class RestTopController {
+    @Autowired
+    private MoneyRecordService mrService;
+
     @GetMapping("/all")
     public String getEvents(@ModelAttribute("eventInfo") EventInfo eventInfo, Model model) throws JsonProcessingException {
         String jsonMsg = null;
@@ -42,8 +50,12 @@ public class RestTopController {
     public void editEvent(@RequestBody EventInfo eventInfo) {
         String jsonMsg = null;
         try {
-            //取得した情報をDBに登録する
+            //ログインしているユーザの名前を取得
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String authName = auth.getName();
 
+            //取得した情報をDBに登録する
+            mrService.registerMoneyRecord(eventInfo, authName);
 
             //表示させる情報をeventsにまとめ出力
 

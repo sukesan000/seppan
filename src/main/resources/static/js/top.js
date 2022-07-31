@@ -11,12 +11,20 @@ $(document).ready(function() {
 })
 
 $(function(){
+
     $('#modal_btn').on("click", function(){
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+          xhr.setRequestHeader(header, token);
+        });
+
         var EventInfo = {
             money: $("#edit_money").val(),
-            category: $("#edit_category").val(),
+            categoryId: $("#edit_category").val(),
             date: $("#edit_date").val(),
-            payer: $("#edit_payer").val(),
+            payerId: $("#edit_payer").val(),
             remarks: $("#edit_remarks").val()
         }
 
@@ -28,11 +36,12 @@ $(function(){
               dataType: "json" // レスポンスデータをjson形式と指定する
             })
             .done(function(data) {
+                alert("登録しました");
                 renderCalendar();
-                console.log("success!!");
               })
-            .fail(function() {
+            .fail(function(e) {
               alert("error!");  // 通信に失敗した場合の処理
+              console.log(e);
             })
     });
 });

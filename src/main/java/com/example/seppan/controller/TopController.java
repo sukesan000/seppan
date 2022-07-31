@@ -26,7 +26,7 @@ public class TopController {
 
     @GetMapping("/top")
     public String top(Model model){
-        List<String> shared_users = new ArrayList<>();
+        List<User> shared_users = new ArrayList<>();
         //ログインしているユーザの名前を取得
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authName = auth.getName();
@@ -34,13 +34,13 @@ public class TopController {
         //ログインユーザの情報取得
         User loginUser = userInfoService.findByName(authName);
         model.addAttribute("loginUser", loginUser);
-         shared_users.add(loginUser.getUserName());
+         shared_users.add(loginUser);
 
         //ログインユーザと共有関係にあるユーザがいれば情報取得
         int sharedUserNo = loginUser.getSharedUser();
         if(sharedUserNo != 0){
             User shared_user = userInfoService.findById(sharedUserNo);
-            shared_users.add(shared_user.getUserName());
+            shared_users.add(shared_user);
             model.addAttribute("users", shared_users);
         }
 

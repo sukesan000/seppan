@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class EventInfo {
-    private int money;
-    private int categoryId;
+    private String money;
+    private String categoryId;
     private String date;
-    private String payer;
+    private String payerId;
     private String remarks;
 }
