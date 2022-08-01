@@ -57,9 +57,6 @@ public class RestTopController {
             //取得した情報をDBに登録する
             mrService.registerMoneyRecord(eventInfo, authName);
 
-            //表示させる情報をeventsにまとめ出力
-
-
             List<DailySummaryModel> events = new ArrayList<>();
             DailySummaryModel event = new DailySummaryModel();
             event.setTitle("first event");
