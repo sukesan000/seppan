@@ -56,24 +56,8 @@ public class RestTopController {
 
             //取得した情報をDBに登録する
             mrService.registerMoneyRecord(eventInfo, authName);
-
-            List<DailySummaryModel> events = new ArrayList<>();
-            DailySummaryModel event = new DailySummaryModel();
-            event.setTitle("first event");
-            event.setStart(eventInfo.getDate());
-            events.add(event);
-
-            event = new DailySummaryModel();
-            event.setTitle("second event");
-            event.setStart("2022-05-24");
-            event.setEnd("2022-05-25");
-            events.add(event);
-
-            //FullCalendar pass encoded string
-            ObjectMapper mapper = new ObjectMapper();
-            jsonMsg =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(events);
-        } catch (JsonProcessingException ioex) {
-            System.out.println(ioex.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
