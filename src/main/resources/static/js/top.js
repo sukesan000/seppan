@@ -54,16 +54,16 @@ $(function(){
               url: "/seppan/top/api/editEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
               type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
               contentType: "application/json",
-              data: JSON.stringify(EventInfo),
-              dataType: "json" // レスポンスデータをjson形式と指定する
+              data: JSON.stringify(EventInfo)
             })
             .done(function(data) {
                 alert("登録しました");
                 renderCalendar();
               })
-            .fail(function(e) {
-              alert("error!");  // 通信に失敗した場合の処理
-              console.log(e);
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.status);
+              console.log(textStatus);
+              console.log(errorThrown);
             })
     });
 });
