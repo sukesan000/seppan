@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MoneyRecordServiceImpl implements MoneyRecordService{
@@ -48,5 +49,11 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
         }
 
         return null;
+    }
+
+    @Override
+    public List<MoneyRecord> getAllMoneyRecord(int userId) {
+        List<MoneyRecord> records = moneyRecordDao.findByUserIdIs(userId);
+        return records;
     }
 }

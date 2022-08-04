@@ -1,7 +1,10 @@
 package com.example.seppan.restController;
 
+import com.example.seppan.entity.MoneyRecord;
+import com.example.seppan.entity.User;
 import com.example.seppan.form.EventInfo;
 import com.example.seppan.model.DailySummaryModel;
+import com.example.seppan.service.CalendarService;
 import com.example.seppan.service.MoneyRecordService;
 import com.example.seppan.service.UserInfoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,26 +23,31 @@ import java.util.List;
 public class RestTopController {
     @Autowired
     private MoneyRecordService mrService;
+    @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
+    private CalendarService calendarService;
 
     @GetMapping("/all")
     public String getEvents(@ModelAttribute("eventInfo") EventInfo eventInfo, Model model) throws JsonProcessingException {
+
+        //ログインしているユーザの名前を取得
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authName = auth.getName();
+
+        //ログインユーザの情報取得
+        User loginUser = userInfoService.findByName(authName);
+
+        //レコード取得
+        List<MoneyRecord> records = mrService.getAllMoneyRecord(loginUser.getUserId());
+        //レコードをカレンダー用の変数に収納
+        List<DailySummaryModel> events = calendarService.changeRecordToEvent(records);
+
         String jsonMsg = null;
-        try {
-            List<DailySummaryModel> events = new ArrayList<>();
-            DailySummaryModel event = new DailySummaryModel();
-            event.setTitle("first event");
-            event.setStart("2022-06-14");
-            events.add(event);
-
-            event = new DailySummaryModel();
-            event.setTitle("second event");
-            event.setStart("2022-06-24");
-            events.add(event);
-
-            //FullCalendar pass encoded string
+        try{
             ObjectMapper mapper = new ObjectMapper();
             jsonMsg =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(events);
-        } catch (JsonProcessingException ioex) {
+        }catch (JsonProcessingException ioex) {
             System.out.println(ioex.getMessage());
         }
         model.addAttribute("eventInfo", eventInfo);

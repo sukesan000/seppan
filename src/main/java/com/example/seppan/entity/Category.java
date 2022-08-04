@@ -2,10 +2,8 @@ package com.example.seppan.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -13,8 +11,10 @@ import javax.persistence.Table;
 public class Category {
     @Column(name = "category_id")
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 }
