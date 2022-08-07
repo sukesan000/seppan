@@ -9,4 +9,9 @@ public class DailySummaryModel implements Serializable {
     private String title;
     private String start;
     private String end;
+    private int CategoryId;
+    private int price;
+    private int recordId;
+    private int payerId;
+    private String remarks;
 }

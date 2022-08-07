@@ -12,13 +12,10 @@ $(document).ready(function() {
 
 $(function(){
 
-    $('#modal_btn').on("click", function(){
-
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        $(document).ajaxSend(function(e, xhr, options) {
-          xhr.setRequestHeader(header, token);
-        });
+    //レコード追加ボタン押下
+    $('#modal_add_btn').on("click", function(){
+        //csrf対策
+        csrfMeasures();
 
         var EventInfo = {
             money: $("#edit_money").val(),
@@ -29,7 +26,6 @@ $(function(){
         }
 
         const {money, categoryId, date, payerId, remarks} = EventInfo;
-        console.log(date.match(/\d{4}-\d{2}-\d{2}/));
         let message = [];
         if(money == ""){
             message.push("金額が未入力です");
@@ -66,6 +62,28 @@ $(function(){
               console.log(errorThrown);
             })
     });
+    //レコード削除ボタン押下
+    $('#modal_delete_btn').on("click", function(){
+        //csrf対策
+        csrfMeasures();
+
+        const recordId = $("#recordId").val();
+        $.ajax({
+                url: "/seppan/top/api/deleteEvent",
+                type: "POST",
+                contentType: "application/json",
+                data: recordId
+        })
+        .done(function(data) {
+            alert("削除しました");
+            renderCalendar();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+        })
+    });
 });
 
 function renderCalendar(){
@@ -81,11 +99,64 @@ function renderCalendar(){
             locale: 'ja',
             aspectRatio: 2.5,
             dayClick: function(date) {
+                $('#modal_delete_btn').hide();
+                $('#modal_update_btn').hide();
+                $('#modal_add_btn').show();
+
                 var dateStr = date.format();
                 console.log(dateStr);
                 document.getElementById("edit_date").value = dateStr;
                 MicroModal.show('modal-1');
+            },
+            eventClick: function(calEvent) {
+                $('#modal_delete_btn').show();
+                $('#modal_update_btn').show();
+                $('#modal_add_btn').hide();
+
+                //idの指定
+                var recordId = calEvent.recordId;
+                document.getElementById("recordId").value = recordId;
+
+                //日付の指定
+                var dateStr = calEvent.start._i;
+                document.getElementById("edit_date").value = dateStr;
+
+                //金額の指定
+                var price = calEvent.price;
+                document.getElementById("edit_money").value = price;
+
+                //カテゴリの指定
+                var categoryId = calEvent.categoryId;
+                //forでcategoryIdとvalueの値が同じものを探す
+                $('#edit_category option').each(function(index, element){
+                    if(element.value == categoryId){
+                        const val = "edit_category option[value='" + categoryId + "']";
+                        $("#" + val).prop('selected', true);
+                    }
+                });
+
+                //支払い者の指定
+                var payerId = calEvent.payerId;
+                $('#edit_payer option').each(function(index, element){
+                    if(element.value == payerId){
+                        const val = "edit_payer option[value='" + payerId + "']";
+                        $("#" + val).prop('selected', true);
+                    }
+                })
+
+                //備考の指定
+                var remarks = calEvent.remarks;
+                document.getElementById("edit_remarks").value = remarks;
+                MicroModal.show('modal-1');
             }
         });
+    });
+}
+
+function　csrfMeasures(){
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
     });
 }

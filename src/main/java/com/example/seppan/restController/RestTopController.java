@@ -27,6 +27,8 @@ public class RestTopController {
     private UserInfoService userInfoService;
     @Autowired
     private CalendarService calendarService;
+    @Autowired
+    private MoneyRecordService moneyRecordService;
 
     @GetMapping("/all")
     public String getEvents(@ModelAttribute("eventInfo") EventInfo eventInfo, Model model) throws JsonProcessingException {
@@ -65,6 +67,15 @@ public class RestTopController {
             //取得した情報をDBに登録する
             mrService.registerMoneyRecord(eventInfo, authName);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @PostMapping("/deleteEvent")
+    public void deleteEvent(@RequestBody int recordId){
+        try{
+            moneyRecordService.deleteOne(recordId);
+        }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
