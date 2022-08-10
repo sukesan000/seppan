@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MoneyRecordDao extends JpaRepository<MoneyRecord, Integer> {
     List<MoneyRecord> findByUserIdIs(int userId);
+    MoneyRecord findById(int recordId);
 }

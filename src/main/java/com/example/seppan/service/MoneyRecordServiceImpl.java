@@ -20,7 +20,7 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
     MoneyRecordDao moneyRecordDao;
 
     @Override
-    public EventInfo registerMoneyRecord(EventInfo info, String userName) {
+    public void registerMoneyRecord(EventInfo info, String userName) {
         MoneyRecord record = new MoneyRecord();
         try {
             LocalDate date = LocalDate.parse(info.getDate());
@@ -44,8 +44,33 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
-        return null;
+    @Override
+    public void updateMoneyRecord(EventInfo info, String userName) {
+        try {
+            LocalDate date = LocalDate.parse(info.getDate());
+
+            //現在時刻取得
+            LocalDateTime nowDate = LocalDateTime.now();
+
+            //登録者のid取得
+            User user = userInfoService.findByName(userName);
+
+            //該当の問合せ取得
+            MoneyRecord record = moneyRecordDao.findById(Integer.parseInt(info.getRecordId()));
+
+            record.setPrice(Integer.parseInt(info.getMoney()));
+            record.setCategoryId(Integer.parseInt(info.getCategoryId()));
+            record.setRecordNote(info.getRemarks());
+            record.setUpdatedAt(nowDate);
+            record.setUserId(user.getUserId());
+            record.setPayerId(Integer.parseInt(info.getPayerId()));
+            moneyRecordDao.save(record);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

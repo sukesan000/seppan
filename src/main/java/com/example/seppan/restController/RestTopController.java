@@ -56,9 +56,8 @@ public class RestTopController {
         return jsonMsg;
     }
 
-    @PostMapping("/editEvent")
-    public void editEvent(@RequestBody EventInfo eventInfo) {
-        String jsonMsg = null;
+    @PostMapping("/addEvent")
+    public void addEvent(@RequestBody EventInfo eventInfo) {
         try {
             //ログインしているユーザの名前を取得
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -80,4 +79,17 @@ public class RestTopController {
         }
     }
 
+    @PostMapping("/updateEvent")
+    public void updateEvent(@RequestBody EventInfo eventInfo){
+        try {
+            //ログインしているユーザの名前を取得
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String authName = auth.getName();
+
+            //取得した情報をDBで更新する
+            mrService.updateMoneyRecord(eventInfo, authName);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 }
