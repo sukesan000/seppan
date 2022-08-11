@@ -20,3 +20,9 @@
 #username_display {
     margin-right: 10px;
 }
+
+#logout-btn {
+    background-color:#6ec25e;
+    outline:none;
+    border:none;
+}
