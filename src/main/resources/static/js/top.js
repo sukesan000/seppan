@@ -118,6 +118,10 @@ function renderCalendar(){
                 $('#modal_update_btn').hide();
                 $('#modal_add_btn').show();
 
+                //内容リセット
+                $("#edit_money").val("");
+                $('#edit_category').prop("selectedIndex", 0);
+
                 var dateStr = date.format();
                 console.log(dateStr);
                 document.getElementById("edit_date").value = dateStr;
@@ -127,6 +131,9 @@ function renderCalendar(){
                 $('#modal_delete_btn').show();
                 $('#modal_update_btn').show();
                 $('#modal_add_btn').hide();
+
+                //日付は記入不可
+                $('#edit_date').attr('readonly',true);
 
                 //idの指定
                 var recordId = calEvent.recordId;
