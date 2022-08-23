@@ -14,7 +14,7 @@ $(function(){
 
     //モーダルで詳細追加時
     $(document).on("click","#amount_details_link",function(){
-        $("#amount_details_area").append("<div class=item_1 amount_details_input_area>" +
+        $("#amount_details_area").append("<br><div class=item_1 amount_details_input_area>" +
                 "<input placeholder='金額を入力'>" +
                 "<select class='amount_details_select'>" +
                 "</select>" +
