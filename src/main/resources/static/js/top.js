@@ -12,6 +12,36 @@ $(document).ready(function() {
 
 $(function(){
 
+    //モーダルで詳細追加時
+    $(document).on("click","#amount_details_link",function(){
+        $("#amount_details_area").append("<div class=item_1 amount_details_input_area>" +
+                "<input placeholder='金額を入力'>" +
+                "<select class='amount_details_select'>" +
+                "</select>" +
+                "</div>");
+
+        $("#amount_details_area").append("<div class=item_2 amount_details_input_area>" +
+                "<input placeholder='金額を入力'>" +
+                "<select class='amount_details_select'>" +
+                "</select>" +
+                "</div>");
+
+        var optionCnt = 1;
+        //edit_payerの値を取得
+        $('#edit_payer option').each(function(index, element){
+            $(".item_" + optionCnt + " select").append($('<option>').text(element.text).val(element.value));
+            optionCnt++;
+        });
+
+        $("#amount_details_link").hide();
+        $("#amount_details_area").append("<a href='#' id=amount_close_link>閉じる</a>");
+    });
+
+    $(document).on("click","#amount_close_link",function(){
+        $("#amount_details_area").children().remove();
+        $("#amount_details_area").append("<a href='#' id=amount_details_link>詳細を記載する</a>");
+    });
+
     //レコード追加ボタン押下
     $('#modal_add_btn').on("click", function(){
         //csrf対策

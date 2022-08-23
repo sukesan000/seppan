@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //ログインエラー時の遷移先 ※パラメーターに「error」を付与
                 .failureUrl("/login?error")
                 //ログイン成功時の遷移先
-                .defaultSuccessUrl("/seppan/top")
+                .defaultSuccessUrl("/top")
                 //ログイン時のキー：名前
                 .usernameParameter("username")
                 //ログイン時のパスワード

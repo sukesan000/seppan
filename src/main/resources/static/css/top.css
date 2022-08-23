@@ -38,3 +38,17 @@
 #edit_payer{
     width: 70px;
 }
+
+.total_amount_area{
+    width: 100%;
+    display:flex;
+}
+
+#amount_area{
+    display:flex;
+    flex-flow: column;
+}
+
+#amount_details_area{
+    text-align: center;
+}

@@ -27,6 +27,16 @@ public class MoneyRecord {
     @Column(name = "price")
     private int price;
 
+    //支払い金額（自分）
+    @NotNull
+    @Column(name = "own_payment")
+    private int ownPayment;
+
+    //支払い金額（相手）
+    @NotNull
+    @Column(name = "partner_payment")
+    private int partnerPayment;
+
     //備考
     @Length(min=0, max=20)
     @Column(name = "record_note")

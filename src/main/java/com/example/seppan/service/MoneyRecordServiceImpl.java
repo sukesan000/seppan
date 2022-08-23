@@ -19,6 +19,7 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
     @Autowired
     MoneyRecordDao moneyRecordDao;
 
+    //レコード追加
     @Override
     public void registerMoneyRecord(EventInfo info, String userName) {
         MoneyRecord record = new MoneyRecord();
@@ -46,6 +47,7 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
         }
     }
 
+    //レコード更新
     @Override
     public void updateMoneyRecord(EventInfo info, String userName) {
         try {
@@ -73,12 +75,14 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
         }
     }
 
+    //レコード全件取得
     @Override
     public List<MoneyRecord> getAllMoneyRecord(int userId) {
         List<MoneyRecord> records = moneyRecordDao.findByUserIdIs(userId);
         return records;
     }
 
+    //レコード一件削除
     @Override
     public void deleteOne(int recordId) {
         moneyRecordDao.deleteById(recordId);

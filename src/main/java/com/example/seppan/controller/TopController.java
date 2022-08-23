@@ -9,8 +9,6 @@ import com.example.seppan.service.CalendarService;
 import com.example.seppan.service.CategoryService;
 import com.example.seppan.service.MoneyRecordService;
 import com.example.seppan.service.UserInfoService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/seppan")
 public class TopController {
     @Autowired
     private UserInfoService userInfoService;
