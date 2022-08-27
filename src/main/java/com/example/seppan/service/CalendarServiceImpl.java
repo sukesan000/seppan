@@ -35,6 +35,8 @@ public class CalendarServiceImpl implements CalendarService{
             summary.setStart(record.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             summary.setCategoryId(record.getCategoryId());
             summary.setPrice(record.getPrice());
+            summary.setOwnPayment(record.getOwnPayment());
+            summary.setPartnerPayment(record.getPartnerPayment());
             summary.setRecordId(record.getId());
             summary.setPayerId(record.getPayerId());
             summary.setRemarks(record.getRecordNote());

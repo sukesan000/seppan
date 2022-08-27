@@ -15,16 +15,19 @@ $(function(){
     //モーダルで詳細追加時
     $(document).on("click","#amount_details_link",function(){
         $("#amount_details_area").append("<br><div class=item_1 amount_details_input_area>" +
-                "<input class='one_side_payment' value=0>" +
+                "<input id='item_1' class='one_side_payment' value=0>" +
                 "<select class='amount_details_select'>" +
                 "</select>" +
                 "</div>");
 
         $("#amount_details_area").append("<div class=item_2 amount_details_input_area>" +
-                "<input class='one_side_payment' value=0>" +
+                "<input id='item_2' class='one_side_payment' value=0>" +
                 "<select class='amount_details_select'>" +
                 "</select>" +
                 "</div>");
+
+        $("#item_1").val($("#ownPayment").val());
+        $("#item_2").val($("#partnerPayment").val());
 
         var optionCnt = 1;
         //edit_payerの値を取得
@@ -49,15 +52,7 @@ $(function(){
         //エラー文
         let message = [];
 
-        var EventInfo = {
-            money: $("#edit_money").val(),
-            ownPayment: $('.item_1 .one_side_payment').val(),
-            partnerPayment: $('.item_2 .one_side_payment').val(),
-            categoryId: $("#edit_category").val(),
-            date: $("#edit_date").val(),
-            payerId: $("#edit_payer").val(),
-            remarks: $("#edit_remarks").val()
-        }
+        var EventInfo = getEventInfo();
         const {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
 
         //バリデーション確認
@@ -123,31 +118,40 @@ $(function(){
         //csrf対策
         csrfMeasures();
 
-        var EventInfo = {
-            recordId: $("#recordId").val(),
-            money: $("#edit_money").val(),
-            categoryId: $("#edit_category").val(),
-            date: $("#edit_date").val(),
-            payerId: $("#edit_payer").val(),
-            remarks: $("#edit_remarks").val()
+        var EventInfo = getEventInfo();
+        const {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
+
+        //バリデーション確認
+        const valMsg = validationCheck(EventInfo);
+        if(valMsg){
+            message.push(valMsg);
         }
 
-        validationCheck(EventInfo);
-        const {money, categoryId, date, payerId, remarks} = EventInfo;
+        //計算があっているかチェック
+        if((ownPayment && partnerPayment) && (ownPayment > 0 || partnerPayment > 0)){
+            const calcMsg = calcCheck(money,ownPayment,partnerPayment)
+            if(calcMsg){
+                message.push(calcMsg);
+            }
+        }
 
-        $.ajax({
-            url: "/seppan/top/api/updateEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
-            type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
-            contentType: "application/json",
-            data: JSON.stringify(EventInfo)
-        }).done(function(data) {
-            alert("編集しました");
-            renderCalendar();
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR.status);
-            console.log(textStatus);
-            console.log(errorThrown);
-        })
+        if(message.length){
+            alert(message);
+        }else{
+            $.ajax({
+                url: "/seppan/top/api/updateEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
+                type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
+                contentType: "application/json",
+                data: JSON.stringify(EventInfo)
+            }).done(function(data) {
+                alert("編集しました");
+                renderCalendar();
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.status);
+                console.log(textStatus);
+                console.log(errorThrown);
+            })
+        }
     })
 });
 
@@ -188,16 +192,25 @@ function renderCalendar(){
                 $('#edit_date').attr('readonly',true);
 
                 //idの指定
-                var recordId = calEvent.recordId;
+                const recordId = calEvent.recordId;
                 document.getElementById("recordId").value = recordId;
 
                 //日付の指定
-                var dateStr = calEvent.start._i;
+                const dateStr = calEvent.start._i;
                 document.getElementById("edit_date").value = dateStr;
 
                 //金額の指定
-                var price = calEvent.price;
+                const price = calEvent.price;
                 document.getElementById("edit_money").value = price;
+
+                //ownPaymentとpartnerPaymentはまだhtmlが作成されていない
+                //自分が支払う金額
+                const ownPayment =calEvent.ownPayment;
+                document.getElementById("ownPayment").value = ownPayment;
+
+                //相手が支払う金額
+                const partnerPayment = calEvent.partnerPayment;
+                document.getElementById("partnerPayment").value = partnerPayment;
 
                 //カテゴリの指定
                 var categoryId = calEvent.categoryId;
@@ -271,4 +284,17 @@ function validationCheck(eventInfo){
     if(message.length > 0){
         return message;
     }
+}
+
+function getEventInfo(){
+    var EventInfo = {
+        money: $("#edit_money").val(),
+        ownPayment: $('.item_1 .one_side_payment').val(),
+        partnerPayment: $('.item_2 .one_side_payment').val(),
+        categoryId: $("#edit_category").val(),
+        date: $("#edit_date").val(),
+        payerId: $("#edit_payer").val(),
+        remarks: $("#edit_remarks").val()
+    }
+    return EventInfo;
 }
