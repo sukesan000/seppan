@@ -33,6 +33,8 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
             User user = userInfoService.findByName(userName);
 
             record.setPrice(Integer.parseInt(info.getMoney()));
+            record.setOwnPayment(Integer.parseInt(info.getOwnPayment()));
+            record.setPartnerPayment(Integer.parseInt(info.getPartnerPayment()));
             record.setCategoryId(Integer.parseInt(info.getCategoryId()));
             record.setRecordNote(info.getRemarks());
             record.setDate(date);
@@ -63,6 +65,8 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
             MoneyRecord record = moneyRecordDao.findById(Integer.parseInt(info.getRecordId()));
 
             record.setPrice(Integer.parseInt(info.getMoney()));
+            record.setOwnPayment(Integer.parseInt(info.getOwnPayment()));
+            record.setPartnerPayment(Integer.parseInt(info.getPartnerPayment()));
             record.setCategoryId(Integer.parseInt(info.getCategoryId()));
             record.setRecordNote(info.getRemarks());
             record.setUpdatedAt(nowDate);

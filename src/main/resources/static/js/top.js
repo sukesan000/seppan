@@ -51,12 +51,14 @@ $(function(){
 
         var EventInfo = {
             money: $("#edit_money").val(),
+            ownPayment: $('.item_1 .one_side_payment').val(),
+            partnerPayment: $('.item_2 .one_side_payment').val(),
             categoryId: $("#edit_category").val(),
             date: $("#edit_date").val(),
             payerId: $("#edit_payer").val(),
             remarks: $("#edit_remarks").val()
         }
-        const {money, categoryId, date, payerId, remarks} = EventInfo;
+        const {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
 
         //バリデーション確認
         const valMsg = validationCheck(EventInfo);
@@ -65,11 +67,8 @@ $(function(){
         }
 
         //計算があっているかチェック
-        const moneyA = $('.item_1 .one_side_payment').val();
-        const moneyB = $('.item_2 .one_side_payment').val();
-
-        if((moneyA && moneyB) && (moneyA > 0 || moneyB > 0)){
-            const calcMsg = calcCheck(money,moneyA,moneyB)
+        if((ownPayment && partnerPayment) && (ownPayment > 0 || partnerPayment > 0)){
+            const calcMsg = calcCheck(money,ownPayment,partnerPayment)
             if(calcMsg){
                 message.push(calcMsg);
             }
