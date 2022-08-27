@@ -15,13 +15,13 @@ $(function(){
     //モーダルで詳細追加時
     $(document).on("click","#amount_details_link",function(){
         $("#amount_details_area").append("<br><div class=item_1 amount_details_input_area>" +
-                "<input placeholder='金額を入力'>" +
+                "<input class='one_side_payment' value=0>" +
                 "<select class='amount_details_select'>" +
                 "</select>" +
                 "</div>");
 
         $("#amount_details_area").append("<div class=item_2 amount_details_input_area>" +
-                "<input placeholder='金額を入力'>" +
+                "<input class='one_side_payment' value=0>" +
                 "<select class='amount_details_select'>" +
                 "</select>" +
                 "</div>");
@@ -46,6 +46,8 @@ $(function(){
     $('#modal_add_btn').on("click", function(){
         //csrf対策
         csrfMeasures();
+        //エラー文
+        let message = [];
 
         var EventInfo = {
             money: $("#edit_money").val(),
@@ -54,25 +56,44 @@ $(function(){
             payerId: $("#edit_payer").val(),
             remarks: $("#edit_remarks").val()
         }
-
-        validationCheck(EventInfo);
         const {money, categoryId, date, payerId, remarks} = EventInfo;
 
-        $.ajax({
-              url: "/seppan/top/api/addEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
-              type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
-              contentType: "application/json",
-              data: JSON.stringify(EventInfo)
+        //バリデーション確認
+        const valMsg = validationCheck(EventInfo);
+        if(valMsg){
+            message.push(valMsg);
+        }
+
+        //計算があっているかチェック
+        const moneyA = $('.item_1 .one_side_payment').val();
+        const moneyB = $('.item_2 .one_side_payment').val();
+
+        if((moneyA && moneyB) && (moneyA > 0 || moneyB > 0)){
+            const calcMsg = calcCheck(money,moneyA,moneyB)
+            if(calcMsg){
+                message.push(calcMsg);
+            }
+        }
+
+        if(message.length){
+            alert(message);
+        }else{
+            $.ajax({
+                url: "/seppan/top/api/addEvent",  // リクエストを送信するURLを指定（action属性のurlを抽出）
+                type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
+                contentType: "application/json",
+                data: JSON.stringify(EventInfo)
             })
-            .done(function(data) {
+                .done(function(data) {
                 alert("登録しました");
                 renderCalendar();
-              })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-              console.log(jqXHR.status);
-              console.log(textStatus);
-              console.log(errorThrown);
             })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.status);
+                console.log(textStatus);
+                console.log(errorThrown);
+            })
+        }
     });
 
     //レコード削除ボタン押下
@@ -150,6 +171,8 @@ function renderCalendar(){
 
                 //内容リセット
                 $("#edit_money").val("");
+                $('.item_1 .one_side_payment').val("");
+                $('.item_2 .one_side_payment').val("");
                 $('#edit_category').prop("selectedIndex", 0);
 
                 var dateStr = date.format();
@@ -213,6 +236,19 @@ function　csrfMeasures(){
     });
 }
 
+function calcCheck(money,moneyA,moneyB){
+    let message = [];
+    if(isNaN(money) || isNaN(moneyA) || isNaN(moneyB)){
+        message.push("数字を入力してください");
+        return message;
+   }
+
+    if(Number(money) != (Number(moneyA) + Number(moneyB))){
+        message.push("計算が間違っています");
+        return message;
+    }
+}
+
 function validationCheck(eventInfo){
     const {money, categoryId, date, payerId, remarks} = eventInfo;
     let message = [];
@@ -234,7 +270,6 @@ function validationCheck(eventInfo){
     }
 
     if(message.length > 0){
-        alert(message);
         return message;
     }
 }
