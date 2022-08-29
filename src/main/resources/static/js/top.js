@@ -1,3 +1,7 @@
+//MODE
+const ADD = 1;
+const UPDATE = 2;
+
 $(document).ready(function() {
         MicroModal.init();
         renderCalendar();
@@ -11,35 +15,12 @@ $(document).ready(function() {
 })
 
 $(function(){
-
     //モーダルで詳細追加時
     $(document).on("click","#amount_details_link",function(){
-        $("#amount_details_area").append("<br><div class=item_1 amount_details_input_area>" +
-                "<input id='item_1' class='one_side_payment' value=0>" +
-                "<select class='amount_details_select'>" +
-                "</select>" +
-                "</div>");
-
-        $("#amount_details_area").append("<div class=item_2 amount_details_input_area>" +
-                "<input id='item_2' class='one_side_payment' value=0>" +
-                "<select class='amount_details_select'>" +
-                "</select>" +
-                "</div>");
-
-        $("#item_1").val($("#ownPayment").val());
-        $("#item_2").val($("#partnerPayment").val());
-
-        var optionCnt = 1;
-        //edit_payerの値を取得
-        $('#edit_payer option').each(function(index, element){
-            $(".item_" + optionCnt + " select").append($('<option>').text(element.text).val(element.value));
-            optionCnt++;
-        });
-
-        $("#amount_details_link").hide();
-        $("#amount_details_area").append("<a href='#' id=amount_close_link>閉じる</a>");
+        setDetail(ADD);
     });
 
+    //閉じるボタン押下時
     $(document).on("click","#amount_close_link",function(){
         $("#amount_details_area").children().remove();
         $("#amount_details_area").append("<a href='#' id=amount_details_link>詳細を記載する</a>");
@@ -52,13 +33,21 @@ $(function(){
         //エラー文
         let message = [];
 
-        var EventInfo = getEventInfo();
-        const {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
+        let EventInfo = getEventInfo();
+        let {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
 
         //バリデーション確認
         const valMsg = validationCheck(EventInfo);
         if(valMsg){
             message.push(valMsg);
+        }
+
+        //空文字であれば0を入れる
+        if(ownPayment　== ""){
+            EventInfo.ownPayment = "0";
+        }
+        if(partnerPayment == ""){
+            EventInfo.partnerPayment = "0";
         }
 
         //計算があっているかチェック
@@ -67,6 +56,12 @@ $(function(){
             if(calcMsg){
                 message.push(calcMsg);
             }
+        }
+
+        //詳細が閉じていればownPaymentとpartnerPaymentには0を入れる
+        if($('.amount_details_input_area').length == 0){
+            EventInfo.ownPayment = "0";
+            EventInfo.partnerPayment = "0";
         }
 
         if(message.length){
@@ -117,9 +112,21 @@ $(function(){
     $('#modal_update_btn').on("click", function(){
         //csrf対策
         csrfMeasures();
+        //エラー文
+        let message = [];
 
-        var EventInfo = getEventInfo();
-        const {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
+        const recordId = $("input[name='recordId']").val();
+
+        let EventInfo = getEventInfo(recordId);
+        let {money, ownPayment, partnerPayment, categoryId, date, payerId, remarks} = EventInfo;
+
+        //空文字であれば0を入れる
+        if(ownPayment　== ""){
+            EventInfo.ownPayment = "0";
+        }
+        if(partnerPayment == ""){
+            EventInfo.partnerPayment = "0";
+        }
 
         //バリデーション確認
         const valMsg = validationCheck(EventInfo);
@@ -172,6 +179,10 @@ function renderCalendar(){
                 $('#modal_update_btn').hide();
                 $('#modal_add_btn').show();
 
+                //詳細リセット
+                $("#amount_details_area").children().remove();
+                $("#amount_details_area").append("<a href='#' id=amount_details_link>詳細を記載する</a>");
+
                 //内容リセット
                 $("#edit_money").val("");
                 $('.item_1 .one_side_payment').val("");
@@ -211,6 +222,10 @@ function renderCalendar(){
                 //相手が支払う金額
                 const partnerPayment = calEvent.partnerPayment;
                 document.getElementById("partnerPayment").value = partnerPayment;
+
+                //詳細
+                setDetail(UPDATE);
+                $("#amount_close_link").hide();
 
                 //カテゴリの指定
                 var categoryId = calEvent.categoryId;
@@ -286,8 +301,9 @@ function validationCheck(eventInfo){
     }
 }
 
-function getEventInfo(){
+function getEventInfo(recordId){
     var EventInfo = {
+        recordId: recordId,
         money: $("#edit_money").val(),
         ownPayment: $('.item_1 .one_side_payment').val(),
         partnerPayment: $('.item_2 .one_side_payment').val(),
@@ -297,4 +313,46 @@ function getEventInfo(){
         remarks: $("#edit_remarks").val()
     }
     return EventInfo;
+}
+
+function setDetail(mode){
+
+    if($('.item_1').length == 0){
+        $("#amount_details_area").append("<br><div class=item_1>" +
+                    "<input id='item_1' class='one_side_payment' value=0>" +
+                    "<select class='amount_details_select'>" +
+                    "</select>" +
+                    "</div>");
+
+        $("#amount_details_area").append("<div class=item_2>" +
+                    "<input id='item_2' class='one_side_payment' value=0>" +
+                    "<select class='amount_details_select'>" +
+                    "</select>" +
+                    "</div>");
+
+        $('.item_1').addClass('amount_details_input_area');
+        $('.item_2').addClass('amount_details_input_area');
+
+        $("#item_1").val($("#ownPayment").val());
+        $("#item_2").val($("#partnerPayment").val());
+
+    }
+    if(mode == 1){
+        $('.item_1 .one_side_payment').val("");
+        $('.item_2 .one_side_payment').val("");
+        $("#amount_details_area").append("<a href='#' id=amount_close_link>閉じる</a>");
+    }else if(mode == 2){
+        $("#item_1").val($("#ownPayment").val());
+        $("#item_2").val($("#partnerPayment").val());
+
+    }
+
+    var optionCnt = 1;
+    //edit_payerの値を取得
+    $('#edit_payer option').each(function(index, element){
+            $(".item_" + optionCnt + " select").append($('<option>').text(element.text).val(element.value));
+            optionCnt++;
+    });
+
+    $("#amount_details_link").hide();
 }
