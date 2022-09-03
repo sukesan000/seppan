@@ -163,11 +163,14 @@ $(function(){
 
     //精算決定ボタン押下
     $('#modal_calc_btn').on("click", function(){
-        let EventInfo =　{
+        //csrf対策
+        csrfMeasures();
+
+        let date_period =　{
             date_from: $("#edit_date_from").val(),
             date_to: $("#edit_date_to").val()
         }
-        let {date_from,date_to} = EventInfo;
+        let {date_from,date_to} = date;
         //日付チェック
         date_from = date_from.replaceAll('-','');
         date_to = date_to.replaceAll('-','');
@@ -179,9 +182,9 @@ $(function(){
 
         $.ajax({
                 url: "/seppan/top/api/adjustment",  // リクエストを送信するURLを指定（action属性のurlを抽出）
-                type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
+                type: "GET",  // HTTPメソッドを指定（デフォルトはGET）
                 contentType: "application/json",
-                data: JSON.stringify(EventInfo)
+                data: JSON.stringify(date_period)
             }).done(function(data) {
                 alert("成功");
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -312,7 +315,7 @@ function calcCheck(money,moneyA,moneyB){
         return message;
    }
 
-    if(Number(money) != (Number(moneyA) + Number(moneyB))){
+    if(Number(money) < (Number(moneyA) + Number(moneyB))){
         message.push("計算が間違っています");
         return message;
     }
