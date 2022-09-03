@@ -25,7 +25,7 @@
         <input id="username"  type="hidden" name="userName" th:value="*{userName}">
     </div>
 
-    <!-- モーダルエリア　-->
+    <!-- 家計簿入力モーダルエリア　-->
     <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
         <div class="modal__overlay" tabindex="-1">
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
@@ -36,7 +36,7 @@
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main>
-                    <form id="modal_form">
+                    <form class="modal_form">
                         <input type="hidden" id="recordId" name="recordId">
                         <div id="amount_area" class="edit_info">
                             <div class="total_amount_area">
@@ -75,6 +75,34 @@
                             <button id = modal_update_btn class="modal__btn modal__btn-primary" type="submit">編集する</button>
                         </div>
                     </form>　
+                </main>
+            </div>
+        </div>
+    </div>
+    <!-- 精算モーダルエリア　-->
+    <div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1">
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-2-title">
+                        精算
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main>
+                    <form class="modal_form">
+                        <div class="edit_info">
+                            <p class = "info_name">開始日</p>
+                            <input type="date" class="edit" id="edit_date_from" name="date">
+                        </div>
+                        <div class="edit_info">
+                            <p class = "info_name">終了日</p>
+                            <input type="date" class="edit" id="edit_date_to" name="date">
+                        </div>
+                        <div class="mordal_submit_btn">
+                            <button id = modal_calc_btn class="modal__btn modal__btn-primary" type="submit">精算する</button>
+                        </div>
+                    </form>
                 </main>
             </div>
         </div>

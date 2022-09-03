@@ -160,6 +160,37 @@ $(function(){
             })
         }
     })
+
+    //精算決定ボタン押下
+    $('#modal_calc_btn').on("click", function(){
+        let EventInfo =　{
+            date_from: $("#edit_date_from").val(),
+            date_to: $("#edit_date_to").val()
+        }
+        let {date_from,date_to} = EventInfo;
+        //日付チェック
+        date_from = date_from.replaceAll('-','');
+        date_to = date_to.replaceAll('-','');
+        const res = Math.sign(date_to - date_from);
+        if(res != 1){
+            alert('期間指定が正常ではありません');
+            return;
+        }
+
+        $.ajax({
+                url: "/seppan/top/api/adjustment",  // リクエストを送信するURLを指定（action属性のurlを抽出）
+                type: "POST",  // HTTPメソッドを指定（デフォルトはGET）
+                contentType: "application/json",
+                data: JSON.stringify(EventInfo)
+            }).done(function(data) {
+                alert("成功");
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.status);
+                console.log(textStatus);
+                console.log(errorThrown);
+            })
+
+    });
 });
 
 function renderCalendar(){
@@ -174,6 +205,17 @@ function renderCalendar(){
             ],
             locale: 'ja',
             aspectRatio: 2.5,
+            customButtons:{
+                eventListButton:{
+                    text: '精算',
+                    click: function() {
+                        MicroModal.show('modal-2');
+                    }
+                }
+            },
+            header: {
+                right: 'eventListButton,prev,next'
+            },
             dayClick: function(date) {
                 $('#modal_delete_btn').hide();
                 $('#modal_update_btn').hide();
@@ -302,7 +344,7 @@ function validationCheck(eventInfo){
 }
 
 function getEventInfo(recordId){
-    var EventInfo = {
+    const EventInfo = {
         recordId: recordId,
         money: $("#edit_money").val(),
         ownPayment: $('.item_1 .one_side_payment').val(),
