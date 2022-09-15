@@ -2,6 +2,7 @@ package com.example.seppan.restController;
 
 import com.example.seppan.entity.MoneyRecord;
 import com.example.seppan.entity.User;
+import com.example.seppan.form.DatePeriod;
 import com.example.seppan.form.EventInfo;
 import com.example.seppan.model.DailySummaryModel;
 import com.example.seppan.service.CalendarService;
@@ -15,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,6 +30,7 @@ public class RestTopController {
     @Autowired
     private MoneyRecordService moneyRecordService;
 
+    //レコード全取得
     @GetMapping("/all")
     public String getEvents(@ModelAttribute("eventInfo") EventInfo eventInfo, Model model) throws JsonProcessingException {
 
@@ -56,6 +57,7 @@ public class RestTopController {
         return jsonMsg;
     }
 
+    //レコード追加
     @PostMapping("/addEvent")
     public void addEvent(@RequestBody EventInfo eventInfo) {
         try {
@@ -70,6 +72,7 @@ public class RestTopController {
         }
     }
 
+    //レコード削除
     @PostMapping("/deleteEvent")
     public void deleteEvent(@RequestBody int recordId){
         try{
@@ -79,6 +82,7 @@ public class RestTopController {
         }
     }
 
+    //レコード更新
     @PostMapping("/updateEvent")
     public void updateEvent(@RequestBody EventInfo eventInfo){
         try {
@@ -91,5 +95,27 @@ public class RestTopController {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    //精算
+    @GetMapping("/adjustment")
+    public int adjustment(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model){
+        int adjustmentAmount = 0;
+        try {
+            //ログインしているユーザの名前を取得
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String authName = auth.getName();
+
+            DatePeriod datePeriod = new DatePeriod();
+            datePeriod.setDateFrom(dateFrom);
+            datePeriod.setDateTo(dateTo);
+
+            //特定の期間の精算を行う
+            adjustmentAmount = mrService.calcMoneyRecord(authName, datePeriod);
+            model.addAttribute("adjustmentAmount", adjustmentAmount);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return adjustmentAmount;
     }
 }

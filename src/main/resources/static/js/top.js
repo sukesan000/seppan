@@ -166,15 +166,15 @@ $(function(){
         //csrf対策
         csrfMeasures();
 
-        let date_period =　{
-            date_from: $("#edit_date_from").val(),
-            date_to: $("#edit_date_to").val()
+        let DatePeriod =　{
+            dateFrom: $("#edit_date_from").val(),
+            dateTo: $("#edit_date_to").val()
         }
-        let {date_from,date_to} = date;
+        let {dateFrom,dateTo} = DatePeriod;
         //日付チェック
-        date_from = date_from.replaceAll('-','');
-        date_to = date_to.replaceAll('-','');
-        const res = Math.sign(date_to - date_from);
+        const date_from_replace = dateFrom.replaceAll('-','');
+        const date_to_replace = dateTo.replaceAll('-','');
+        const res = Math.sign(date_to_replace - date_from_replace);
         if(res != 1){
             alert('期間指定が正常ではありません');
             return;
@@ -183,10 +183,12 @@ $(function(){
         $.ajax({
                 url: "/seppan/top/api/adjustment",  // リクエストを送信するURLを指定（action属性のurlを抽出）
                 type: "GET",  // HTTPメソッドを指定（デフォルトはGET）
-                contentType: "application/json",
-                data: JSON.stringify(date_period)
+                data: {
+                    dateFrom: dateFrom,
+                    dateTo: dateTo
+                }
             }).done(function(data) {
-                alert("成功");
+                alert(data);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.status);
                 console.log(textStatus);

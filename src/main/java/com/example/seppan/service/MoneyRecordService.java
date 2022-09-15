@@ -1,8 +1,10 @@
 package com.example.seppan.service;
 
 import com.example.seppan.entity.MoneyRecord;
+import com.example.seppan.form.DatePeriod;
 import com.example.seppan.form.EventInfo;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MoneyRecordService {
@@ -10,4 +12,5 @@ public interface MoneyRecordService {
     void updateMoneyRecord(EventInfo info, String userName);
     List<MoneyRecord> getAllMoneyRecord(int userId);
     void deleteOne(int recordId);
+    int calcMoneyRecord(String authName, DatePeriod datePeriod);
 }

@@ -3,6 +3,7 @@ package com.example.seppan.service;
 import com.example.seppan.dao.MoneyRecordDao;
 import com.example.seppan.entity.MoneyRecord;
 import com.example.seppan.entity.User;
+import com.example.seppan.form.DatePeriod;
 import com.example.seppan.form.EventInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
             record.setRecordNote(info.getRemarks());
             record.setDate(date);
             record.setCreatedAt(nowDate);
-            record.setUpdatedAt(null);
+            record.setUpdatedAt(nowDate);
             record.setUserId(user.getUserId());
             record.setPayerId(Integer.parseInt(info.getPayerId()));
             moneyRecordDao.save(record);
@@ -90,6 +91,55 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
     @Override
     public void deleteOne(int recordId) {
         moneyRecordDao.deleteById(recordId);
+    }
+
+    @Override
+    public int calcMoneyRecord(String authName, DatePeriod datePeriod) {
+
+        User user = userInfoService.findByName(authName);
+        int ownId = user.getUserId();
+        int partnerId = user.getSharedUser();
+        //自分が支払った時の共有部分
+        int ownTotalPrice = 0;
+        //相手が支払った時の共有部分
+        int partnerTotalPrice = 0;
+        //自分が支払った時の相手の品物の合計
+        int totalPartnerPayment = 0;
+        //相手が支払った時の自分の品物の合計
+        int totalOwnPayment = 0;
+        //精算金額
+        int adjustmentAmount;
+
+        List<MoneyRecord> ownRecordList = moneyRecordDao.findRecordListByIdFromTo(ownId,datePeriod.getDateFrom(),datePeriod.getDateTo());
+        List<MoneyRecord> partnerRecordList = moneyRecordDao.findRecordListByIdFromTo(partnerId,datePeriod.getDateFrom(),datePeriod.getDateTo());
+
+        for(MoneyRecord record: ownRecordList){
+            //共有部分を求める
+            int price = record.getPrice();
+            int ownPrice = record.getOwnPayment();
+            int partnerPrice = record.getPartnerPayment();
+            totalPartnerPayment += partnerPrice;
+            ownTotalPrice += price - (ownPrice + partnerPrice);
+        }
+
+        for(MoneyRecord record: partnerRecordList){
+            //共有部分を求める
+            int price = record.getPrice();
+            int ownPrice = record.getOwnPayment();
+            int partnerPrice = record.getPartnerPayment();
+            totalOwnPayment += ownPrice;
+            partnerTotalPrice += price - (ownPrice + partnerPrice);
+        }
+
+        adjustmentAmount = ((ownTotalPrice / 2) + totalPartnerPayment) - ((partnerTotalPrice / 2) + totalOwnPayment);
+
+//        (A + C) - (B + D)
+//
+//        A 自分が支払った共有部分/ 2
+//        B 相手が支払った共有部分/ 2
+//        C 自分が支払った時の相手の品物の合計 partner_payment
+//        D 相手が支払った時の自分の品物の合計 own_payment
+        return adjustmentAmount;
     }
 
 }
