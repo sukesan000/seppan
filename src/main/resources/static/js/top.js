@@ -202,6 +202,7 @@ function renderCalendar(){
     $(function() {
         $('#calendar').fullCalendar({
             initialView: 'dayGridMonth',
+            locale: 'ja',
             eventSources: [
                 {
                     url: '/seppan/top/api/all',
