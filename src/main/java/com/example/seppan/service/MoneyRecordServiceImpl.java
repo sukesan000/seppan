@@ -82,8 +82,8 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
 
     //レコード全件取得
     @Override
-    public List<MoneyRecord> getAllMoneyRecord(int userId) {
-        List<MoneyRecord> records = moneyRecordDao.findByUserIdIs(userId);
+    public List<MoneyRecord> getAllMoneyRecord(int userId, int partnerId) {
+        List<MoneyRecord> records = moneyRecordDao.findByUserIdAndSharedUserId(userId, partnerId);
         return records;
     }
 

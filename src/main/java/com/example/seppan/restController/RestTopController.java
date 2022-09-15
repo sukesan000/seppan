@@ -40,9 +40,11 @@ public class RestTopController {
 
         //ログインユーザの情報取得
         User loginUser = userInfoService.findByName(authName);
+        //共有ユーザのid取得
+        int sharedUserId = loginUser.getSharedUser();
 
         //レコード取得
-        List<MoneyRecord> records = mrService.getAllMoneyRecord(loginUser.getUserId());
+        List<MoneyRecord> records = mrService.getAllMoneyRecord(loginUser.getUserId(), loginUser.getSharedUser());
         //レコードをカレンダー用の変数に収納
         List<DailySummaryModel> events = calendarService.changeRecordToEvent(records);
 
