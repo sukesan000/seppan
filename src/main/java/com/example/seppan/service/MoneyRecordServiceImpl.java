@@ -5,6 +5,9 @@ import com.example.seppan.entity.MoneyRecord;
 import com.example.seppan.entity.User;
 import com.example.seppan.form.DatePeriod;
 import com.example.seppan.form.EventInfo;
+import com.example.seppan.restController.RestTopController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,8 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
     UserInfoService userInfoService;
     @Autowired
     MoneyRecordDao moneyRecordDao;
+
+    Logger logger = LoggerFactory.getLogger(RestTopController.class);
 
     //レコード追加
     @Override
@@ -44,6 +49,8 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
             record.setUserId(user.getUserId());
             record.setPayerId(Integer.parseInt(info.getPayerId()));
             moneyRecordDao.save(record);
+
+            logger.info("レコード登録 recordId: userId:{} price:{}", user.getUserId(), info.getMoney());
 
         }catch (Exception e){
             e.printStackTrace();
@@ -75,6 +82,8 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
             record.setPayerId(Integer.parseInt(info.getPayerId()));
             moneyRecordDao.save(record);
 
+            logger.info("レコード更新 recordId:{} userId:{} price:{}", record.getId(),user.getUserId(), info.getMoney());
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -91,6 +100,7 @@ public class MoneyRecordServiceImpl implements MoneyRecordService{
     @Override
     public void deleteOne(int recordId) {
         moneyRecordDao.deleteById(recordId);
+        logger.info("レコード削除 recordId:{} userId: price:", recordId);
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.example.seppan.service.MoneyRecordService;
 import com.example.seppan.service.UserInfoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +31,8 @@ public class RestTopController {
     private CalendarService calendarService;
     @Autowired
     private MoneyRecordService moneyRecordService;
+
+    Logger logger = LoggerFactory.getLogger(RestTopController.class);
 
     //レコード全取得
     @GetMapping("/all")
@@ -53,9 +57,11 @@ public class RestTopController {
             ObjectMapper mapper = new ObjectMapper();
             jsonMsg =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(events);
         }catch (JsonProcessingException ioex) {
-            System.out.println(ioex.getMessage());
+            logger.error(ioex.getMessage());
         }
         model.addAttribute("eventInfo", eventInfo);
+
+        logger.info("INFO getAllData");
         return jsonMsg;
     }
 
@@ -70,7 +76,7 @@ public class RestTopController {
             //取得した情報をDBに登録する
             mrService.registerMoneyRecord(eventInfo, authName);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -80,7 +86,7 @@ public class RestTopController {
         try{
             moneyRecordService.deleteOne(recordId);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -116,7 +122,7 @@ public class RestTopController {
             adjustmentAmount = mrService.calcMoneyRecord(authName, datePeriod);
             model.addAttribute("adjustmentAmount", adjustmentAmount);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return adjustmentAmount;
     }
